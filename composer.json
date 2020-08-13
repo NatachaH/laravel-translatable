@@ -1,0 +1,24 @@
+{
+    "name": "nh/translatable",
+    "description": "Make a Laravel model translatable",
+    "license": "MIT",
+    "type": "library",
+    "require": {},
+    "author": {
+        "name": "Natacha Herth",
+        "email": "info@natachaherth.ch"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nh\\Translatable\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nh\\Translatable\\TranslatableServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
