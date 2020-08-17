@@ -2,6 +2,7 @@
 namespace Nh\Translatable;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Routing\Router;
 
 class TranslatableServiceProvider extends ServiceProvider
 {
@@ -21,12 +22,12 @@ class TranslatableServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
 
         // VENDORS
         $this->publishes([
-            __DIR__.'/../config/translatable.php' => config_path('translatable.php')
+            __DIR__.'/../config/localization.php' => config_path('localization.php')
         ], 'translatable');
 
         // MIDDLEWARES
