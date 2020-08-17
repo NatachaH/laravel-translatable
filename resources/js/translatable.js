@@ -14,8 +14,6 @@ toggles.forEach((toggle, i) => {
   var lang = toggle.getAttribute('data-lang');
   var value = toggle.getAttribute('data-lang-value') ?? lang;
 
-  console.log('aaa');
-
   // On click on .lang-toggle
   toggle.addEventListener('click', (event) => {
       toggleByLang(lang);
