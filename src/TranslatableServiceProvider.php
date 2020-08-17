@@ -32,7 +32,7 @@ class TranslatableServiceProvider extends ServiceProvider
         ], 'translatable');
 
         // MIDDLEWARES
-        $router->aliasMiddleware('loacalization', \Nh\Translatable\Http\Middleware\Localization::class);
+        $router->aliasMiddleware('localization', \Nh\Translatable\Http\Middleware\Localization::class);
 
         // ROUTES
         $this->loadRoutesFrom(__DIR__ . '/../routes/translatable.php');
