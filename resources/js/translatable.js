@@ -12,10 +12,14 @@ var toggles = document.querySelectorAll('.lang-toggle');
 toggles.forEach((toggle, i) => {
   // Get the lang
   var lang = toggle.getAttribute('data-lang');
+  var value = toggle.getAttribute('data-lang-value') ?? lang;
+
+  console.log('aaa');
+
   // On click on .lang-toggle
   toggle.addEventListener('click', (event) => {
       toggleByLang(lang);
-      toggleCurrentValue(lang);
+      toggleCurrentValue(value);
   });
 });
 
@@ -32,11 +36,14 @@ function toggleByLang(lang)
 
     items.forEach((item, i) => {
 
+        // Get lang attribute per item
+        var languages = item.getAttribute('data-lang');
+
         // Is item a link '.lang-toggle'
         var isLink = item.classList.contains('lang-toggle');
 
-        // As the lang to display
-        var asLang = item.getAttribute('data-lang') === lang;
+        // Did the item as the language (can be a string with pipes)
+        var asLang = languages.indexOf('|') >= 0 ? languages.split('|').indexOf(lang) >= 0 : languages === lang;
 
         // Is the lang empty
         var langEmpty = lang === '' || lang === null ||  lang === undefined;

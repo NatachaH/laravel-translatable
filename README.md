@@ -61,11 +61,14 @@ require('../../vendor/nh/translatable/resources/js/translatable');
 ```
 
 Then in your html add the links with the class **.lang-toggle** and the data attribute **data-lang**:
+*To display a different value than the abbreviation of the language, you can add the attribute data-lang-value*
 
 ```
+The current language is: <span class="lang-toggle-current">Français</span>
+
 <nav>
-  <a href="#" class="lang-toggle" data-lang="fr">FR</a>
-  <a href="#" class="lang-toggle" data-lang="en">EN</a>
+  <a href="#" class="lang-toggle" data-lang="fr" data-lang-value="Français">FR</a>
+  <a href="#" class="lang-toggle" data-lang="en" data-lang-value="Anglais">EN</a>
 </nav>
 ```
 
@@ -77,6 +80,9 @@ And add the data attribute **data-lang** to the content to filter by lang:
 </div>
 <div data-lang="en">
   Only in english
+</div>
+<div data-lang="en|fr">
+  Multiple languages
 </div>
 ```
 
