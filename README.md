@@ -113,3 +113,15 @@ And the inputs for all the available languages:
   <input class="form-control d-none" name="translations[{{ $key }}][title]" type="text" value="{{ $page->getTranslation('title',$key) }}" data-lang="{{ $key }}"/>
 @endforeach
 ```
+
+# Events
+
+You can use the **TranslationEvent** for dispatch events that happen to the addresses.
+*This will return an event with the $event->name as translation.my-event*
+
+
+```
+TranslationEvent::dispatch('my-event', $model);
+```
+
+By default the method **$model->setTranslations()** will fire the event **translation.created** or **translation.updated**

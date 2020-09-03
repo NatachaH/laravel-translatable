@@ -5,6 +5,7 @@ use App;
 use Illuminate\Database\Eloquent\Builder;
 
 use Nh\Translatable\Translation;
+use Nh\Translatable\Events\TranslationEvent;
 
 trait Translatable
 {
@@ -83,7 +84,7 @@ trait Translatable
               foreach ($translation as $field => $value)
               {
                   // Update or create the translation
-                  $this->translations()->updateOrCreate(
+                  $translation = $this->translations()->updateOrCreate(
                       [
                         'translatable_id' => $this->id,
                         'translatable_type' => get_class($this),
@@ -94,6 +95,15 @@ trait Translatable
                         'value' => $value
                       ]
                   );
+
+                  // Dispatch the event
+                  if($translation->wasRecentlyCreated)
+                  {
+                      TranslationEvent::dispatch('created', $this);
+                  } else if($translation->wasChanged()) {
+                      TranslationEvent::dispatch('updated', $this);
+                  }
+
               }
           }
       }
