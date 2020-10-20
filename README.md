@@ -6,7 +6,7 @@ Install the package via composer:
 composer require nh/translatable
 ```
 
-Publish the config file for the translatable:
+Publish the config, the migration and the model files for the translatable:
 *You can define the available languages in this config file*
 
 ```
