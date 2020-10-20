@@ -27,9 +27,8 @@ class TranslatableServiceProvider extends ServiceProvider
 
         // VENDORS
         $this->publishes([
-            __DIR__.'/../stubs/config/localization.php' => config_path('localization.php'),
-            __DIR__.'/../stubs/database/migrations/2020_08_10_000000_create_translations_table.php' => base_path('database/migrations/2020_08_10_000000_create_translations_table.php'),
-            __DIR__.'/../stubs/app/Models/Translation.php' => app_path('Models/Translation.php'),
+            __DIR__.'/../config/localization.php' => config_path('localization.php'),
+            __DIR__.'/../database/migrations/2020_08_10_000000_create_translations_table.php' => base_path('database/migrations/2020_08_10_000000_create_translations_table.php')
         ], 'translatable');
 
         // MIDDLEWARES

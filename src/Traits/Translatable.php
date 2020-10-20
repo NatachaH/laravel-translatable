@@ -4,7 +4,7 @@ namespace Nh\Translatable\Traits;
 use App;
 use Illuminate\Database\Eloquent\Builder;
 
-use App\Models\Translation;
+use Nh\Translatable\Models;
 use Nh\Translatable\Events\TranslationEvent;
 
 trait Translatable
