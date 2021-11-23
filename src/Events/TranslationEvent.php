@@ -4,7 +4,7 @@ namespace Nh\Translatable\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Nh\Translatable\Models\Translation;
+use App\Models\Translation;
 
 class TranslationEvent
 {
@@ -38,7 +38,7 @@ class TranslationEvent
      * Create a new event instance.
      * @param string  $name
      * @param \Illuminate\Database\Eloquent\Model  $model
-     * @param \Nh\Translatable\Models\Translation  $relation
+     * @param \App\Models\Translation  $relation
      * @param int  $number
      */
     public function __construct($name,$model,$relation = null,$number = null)

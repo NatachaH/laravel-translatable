@@ -29,10 +29,13 @@ trait Translatable
           // Before an item is deleted
           static::deleting(function ($model)
           {
-              $translations_to_delete = $model->translations()->withTrashed()->get()->modelKeys();
-              $hasSoftDelete = in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($model));
-              $isForceDelete = !$hasSoftDelete || $model->isForceDeleting();
-              $model->deleteTranslation($translations_to_delete,$isForceDelete,false);
+              if($model->hasTranslations(true))
+              {
+                $translations_to_delete = $model->translations()->withTrashed()->get()->modelKeys();
+                $hasSoftDelete = in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($model));
+                $isForceDelete = !$hasSoftDelete || $model->isForceDeleting();
+                $model->deleteTranslations($translations_to_delete,$isForceDelete,false);
+              }
           });
 
           // Before an item is restored, restore the translations
@@ -40,7 +43,11 @@ trait Translatable
           {
               static::restoring(function ($model)
               {
-                  $model->translations()->withTrashed()->restore();
+                  if($model->hasTranslations(true))
+                  {
+                      $translations_to_restore = $model->translations()->withTrashed()->restore();
+                      TranslationEvent::dispatch('restored',$model,null,$translations_to_restore);
+                  }
               });
           }
       }
@@ -53,6 +60,16 @@ trait Translatable
       {
             return $this->morphMany(Translation::class, 'translatable');
       }
+
+     /**
+      * Check if the model has some translations.
+      * @param boolean $withTrashed
+      * @return boolean
+      */
+     public function hasTranslations($withTrashed = false)
+     {
+            return $withTrashed ? $this->translations()->withTrashed()->exists() : $this->translations()->exists();
+     }
 
       /**
        * Get a translations for a model.
@@ -108,7 +125,7 @@ trait Translatable
       * @param  boolean $eventPerTranslation
       * @return void
       */
-     private function deleteTranslation($translations_to_delete,$forceDelete = false, $eventPerTranslation = false)
+     private function deleteTranslations($translations_to_delete,$forceDelete = false, $eventPerTranslation = false)
      {
          foreach($translations_to_delete as $id)
          {
