@@ -20,7 +20,7 @@ class Localization
     {
 
         // Get the available languages
-        $availables = config('localization.languages');
+        $availables = config('translatable.languages');
 
         // Get the requested language
         $lang = $request->segment(1);

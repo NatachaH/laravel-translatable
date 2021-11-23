@@ -44,7 +44,7 @@ Route::middleware('localization')->get('/', function () {
 You can change the language of the website by using the **localization** route:
 
 ```
-@foreach (config('localization.languages') as $key => $value)
+@foreach (config('translatable.languages') as $key => $value)
   <a href="{{ route('localization', ['lang' => $key]) }}">
     {{ $value }}
   </a>
@@ -93,13 +93,13 @@ Exemple for a form with multiple translations to insert.
 Add Somewhere the language toggle with all the available languages:
 
 ```
-<div id="myLangToggle">
-<button class="btn dropdown-toggle lang-toggle-current" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ config('localization.default') }}</button>
-<div class="dropdown-menu">
-  @foreach (config('localization.languages') as $key => $value)
-    <a class="dropdown-item lang-toggle {{ $key == config('localization.default') ? 'active' : '' }}" href="#" data-lang="{{ $key }}">{{ $value }}</a>
-  @endforeach
-</div>
+<div id="myLangToggle" class="dropdown">
+  <button class="btn dropdown-toggle lang-toggle-current" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ config('translatable.default') }}</button>
+  <div class="dropdown-menu">
+    @foreach (config('translatable.languages') as $key => $value)
+      <a class="dropdown-item lang-toggle {{ $key == config('translatable.default') ? 'active' : '' }}" href="#" data-lang="{{ $key }}">{{ $value }}</a>
+    @endforeach
+  </div>
 </div>
 ```
 
@@ -107,9 +107,9 @@ And the inputs for all the available languages:
 
 ```
 <label>Title</label>
-<input class="form-control" name="title" type="text" value="{{ $page->title }}" data-lang="{{ config('localization.default') }}"/>
+<input class="form-control" name="title" type="text" value="{{ $page->title }}" data-lang="{{ config('translatable.default') }}"/>
 
-@foreach (Arr::except(config('localization.languages'), config('localization.default')) as $key => $value)
+@foreach (Arr::except(config('translatable.languages'), config('translatable.default')) as $key => $value)
   <input class="form-control d-none" name="translations[{{ $key }}][title]" type="text" value="{{ $page->getTranslation('title',$key) }}" data-lang="{{ $key }}"/>
 @endforeach
 ```
@@ -117,11 +117,8 @@ And the inputs for all the available languages:
 # Events
 
 You can use the **TranslationEvent** for dispatch events that happen to the addresses.
-*This will return an event with the $event->name as translation.my-event*
-
+*You can pass a name, the parent model, the translation model (or null) and the number of translations affected*
 
 ```
-TranslationEvent::dispatch('my-event', $model);
+TranslationEvent::dispatch('my-event', $model, $translation, 1);
 ```
-
-By default the method **$model->setTranslations()** will fire the event **translation.created** or **translation.updated**

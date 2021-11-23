@@ -2,9 +2,7 @@
 namespace Nh\Translatable\Traits;
 
 use App;
-use Illuminate\Database\Eloquent\Builder;
 
-use Nh\Translatable\Models;
 use Nh\Translatable\Events\TranslationEvent;
 
 trait Translatable
@@ -30,16 +28,10 @@ trait Translatable
           // Before an item is deleted
           static::deleting(function ($model)
           {
-              $translations_to_delete = $model->translations()->withTrashed()->get();
+              $translations_to_delete = $model->translations()->withTrashed()->get()->modelKeys();
               $hasSoftDelete = in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses($model));
               $isForceDelete = !$hasSoftDelete || $model->isForceDeleting();
-
-              if($isForceDelete)
-              {
-                $model->translations()->forceDelete();
-              } else {
-                $model->translations()->delete();
-              }
+              $model->deleteTranslation($translations_to_delete,$isForceDelete,false);
           });
 
           // Before an item is restored, restore the translations
@@ -99,14 +91,52 @@ trait Translatable
                   // Dispatch the event
                   if($translation->wasRecentlyCreated)
                   {
-                      TranslationEvent::dispatch('created', $this);
+                      TranslationEvent::dispatch('created', $this, $translation, 1);
                   } else if($translation->wasChanged()) {
-                      TranslationEvent::dispatch('updated', $this);
+                      TranslationEvent::dispatch('updated', $this, $translation, 1);
                   }
 
               }
           }
       }
+
+      /**
+      * Delete multiple translation to a model.
+      * @param  array $translations_to_delete
+      * @param  boolean $forceDelete
+      * @param  boolean $eventPerTranslation
+      * @return void
+      */
+     private function deleteTranslation($translations_to_delete,$forceDelete = false, $eventPerTranslation = false)
+     {
+         foreach($translations_to_delete as $id)
+         {
+            // Find the Translation (even if in trash)
+            $translation = $this->translations()->withTrashed()->find($id);
+
+            if($forceDelete)
+            {
+                // Force delete from the DB
+                $translation->forceDelete();
+            } else {
+                // Soft delete from the DB
+                $translation->delete();
+            }
+
+            if($eventPerTranslation)
+            {
+              // Fire event per transaltion
+              TranslationEvent::dispatch(($forceDelete ? 'force-deleted' : 'soft-deleted'), $this, $translation, 1);
+            }
+
+         }
+
+         if(!$eventPerTranslation)
+         {
+           // Fire event for global delete
+           TranslationEvent::dispatch(($forceDelete ? 'force-deleted' : 'soft-deleted'), $this, null, count($translations_to_delete));
+         }
+     }
 
       /**
        * Get the title translated.
