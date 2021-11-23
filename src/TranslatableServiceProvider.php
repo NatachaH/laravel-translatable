@@ -27,7 +27,7 @@ class TranslatableServiceProvider extends ServiceProvider
         // VENDORS
         $this->publishes([
             __DIR__.'/../config/translatable.php' => config_path('translatable.php'),
-            __DIR__.'/Models/Translations.php' => app_path('Models/Translations.php')
+            __DIR__.'/Models/Translation.php' => app_path('Models/Translation.php')
         ], 'translatable');
 
          // VENDORS

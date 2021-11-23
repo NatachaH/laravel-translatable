@@ -4,6 +4,7 @@ namespace Nh\Translatable\Traits;
 use App;
 
 use Nh\Translatable\Events\TranslationEvent;
+use App\Models\Translation;
 
 trait Translatable
 {

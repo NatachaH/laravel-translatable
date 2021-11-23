@@ -22,7 +22,7 @@ class LocalizationController extends Controller
         $segments = explode('/',$previous);
 
         // Get the available languages
-        $availables = config('localization.languages');
+        $availables = config('translatable.languages');
 
         // Check if the language is available, otherwise take the default
         $locale = Arr::has($availables, $lang) ? $lang : app()->getLocale();
