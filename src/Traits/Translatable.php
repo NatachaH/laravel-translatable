@@ -20,7 +20,7 @@ trait Translatable
           static::saved(function ($model)
           {
               // Add some translations
-              if(request()->has('translations'))
+              if((!property_exists($model,'translatable') || $model->translatable['automatic'] == true) && request()->has('translations'))
               {
                   $model->setTranslations(request()->translations);
               }
@@ -86,7 +86,7 @@ trait Translatable
        * Create or update translations for a model.
        * @param array $translations
        */
-      protected function setTranslations($translations)
+      public function setTranslations($translations)
       {
           // Foreach array translations[lang]
           foreach ($translations as $lang => $translation) {

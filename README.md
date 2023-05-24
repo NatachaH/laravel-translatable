@@ -21,6 +21,21 @@ use Nh\Translatable\Traits\Translatable;
 use Translatable;
 ```
 
+If you need to customize the insertion for the translation you can add to your model:
+
+```
+/**
+  * Default translatable option.
+  *
+  * @var array
+  */
+protected $translatable = [
+    'automatic' => false
+];
+```
+
+And simply set the translations with the function **$model->setTranslations(['en' => ['name' => 'English'],'de' => ['name' => 'Deutsch']])**.
+
 ## Route
 
 To make a route translatable, add the middleware **localization** and the prefixe **{locale}** to your route:
